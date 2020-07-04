@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 
 namespace SudokuSolver
 {
-	public class BinaryMatrix
-	{
+  public class BinaryMatrix
+  {
     public int sudoku_size { get; } = 81;
     public int line_size { get; } = 9;
     public int width { get; } = 324;
@@ -15,22 +15,22 @@ namespace SudokuSolver
     private BitArray matrix;
 
     public BinaryMatrix(ref char[] sudoku)
-		{
-			int used_cells = 0;
-			foreach (char cell in sudoku)
-			{
-				if (cell != '.')
-					used_cells++;
-			}
+    {
+      int used_cells = 0;
+      foreach (char cell in sudoku)
+      {
+        if (cell != '.')
+          used_cells++;
+      }
       height = 729 - 8 * used_cells;
-			matrix = new BitArray(height * width);
-			matrix.SetAll(false);
+      matrix = new BitArray(height * width);
+      matrix.SetAll(false);
 
-			int current_height = 0;
-			for (int i = 0; i < sudoku_size; i++)
-			{
-				int current_line = i / line_size;
-				int current_column = i % line_size;
+      int current_height = 0;
+      for (int i = 0; i < sudoku_size; i++)
+      {
+        int current_line = i / line_size;
+        int current_column = i % line_size;
         int current_box = (current_line / 3) * 3 + current_column / 3;
 
         if (sudoku[i] == '.')
@@ -47,8 +47,8 @@ namespace SudokuSolver
           current_height++;
         }
 
-			}
-		}
+      }
+    }
 
     private void fillRow(int height, int line, int column, int box, int pos, int value)
     {
@@ -114,5 +114,5 @@ namespace SudokuSolver
     {
       get => matrix[height * this.width + width];
     }
-	}
+  }
 }

@@ -12,7 +12,7 @@ namespace SudokuSolver
   {
     static void Main(string[] args)
     {
-      string sudoku = "..65....2847.......9..4....5.2.....3..8..............5.5...83....9.748..6....97..";
+      string sudoku = "61...7.....2....8.....964..5....9....68......92........4.7....9.8.2..6..1...4..28";
       char[] char_sudoku = sudoku.ToCharArray();
       Stopwatch stopwatch = new Stopwatch();
 
