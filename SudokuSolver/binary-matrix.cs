@@ -41,7 +41,7 @@ namespace SudokuSolver
             current_height++;
           }
         }
-        else
+        else if (char.IsDigit(sudoku[i]))
         {
           fillRow(current_height, current_line, current_column, current_box, i, sudoku[i] - 49);
           current_height++;
@@ -69,8 +69,12 @@ namespace SudokuSolver
         {
           if (matrix[i * width + j])
             Console.Write(1);
+          else
+          {
+            Console.Write(0);
+          }
         }
-        Console.Write("\n");
+        Console.Write("\nline ");
 
       }
     }
