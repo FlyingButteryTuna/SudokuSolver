@@ -1,120 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.SqlTypes;
 using System.Linq;
-using System.Runtime;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SudokuSolver
+namespace SudokuSolverGui.ExactCover
 {
-  internal class DancingNode
+  public partial class SudokuSolver
   {
-    public DancingNode left { get; set; }
-    public DancingNode right { get; set; }
-    public DancingNode top { get; set; }
-    public DancingNode bottom { get; set; }
-    public ColumnNode column_node { get; set; }
-    public int row { get; set; }
-
-    public DancingNode(int row = -1)
-    {
-      left = right = top = bottom = null;
-      this.row = row;
-    }
-
-    public DancingNode(ref ColumnNode column, int row = -1) :
-      this(row)
-    {
-      column_node = column;
-    }
-
-    public void removeLR()
-    {
-      left.right = right;
-      right.left = left;
-    }
-
-    public void insertLR()
-    {
-      left.right = this;
-      right.left = this;
-    }
-
-    public void removeTB()
-    {
-      top.bottom = bottom;
-      bottom.top = top;
-    }
-
-    public void insertTB()
-    {
-      top.bottom = this;
-      bottom.top = this;
-    }
-  }
-
-  internal class ColumnNode : DancingNode
-  {
-    public DancingNode node { get; set; }
-    public int column { get; set; }
-    public int size { get; set; }
-
-    public ColumnNode(int column = -1) :
-      base()
-    {
-      this.column = column;
-      column_node = this;
-      size = 0;
-    }
-
-    public void cover()
-    {
-      removeLR();
-      for (DancingNode i = bottom; i != this; i = i.bottom)
-      {
-        for (DancingNode j = i.right; j != i; j = j.right)
-        {
-          j.column_node.size--;
-          j.removeTB();
-        }
-      }
-    }
-
-    public void uncover()
-    {
-      if (top == null)
-      {
-        insertLR();
-        return;
-      }
-      for (DancingNode i = top; i != this; i = i.top)
-      {
-        for (DancingNode j = i.left; j != i; j = j.left)
-        {
-          j.column_node.size++;
-          j.insertTB();
-        }
-      }
-      insertLR();
-    }
-  }
-
-  class QuadLinkedList
-  {
-    List<ColumnNode> column_nodes = new List<ColumnNode>();
-    public List<DancingNode> solution { get; set; } = new List<DancingNode>();
-    public List<DancingNode> solution1 { get; set; } = new List<DancingNode>();
+    private List<ColumnNode> column_nodes = new List<ColumnNode>();
+    private List<List<DancingNode>> solutions = new List<List<DancingNode>>();
     private BinaryMatrix matrix;
-    ColumnNode head = new ColumnNode(-4);
+    private ColumnNode head = new ColumnNode(-4);
+    public List<int[,]> converted_result { get; } = new List<int[,]>();
 
-    public QuadLinkedList(ref BinaryMatrix matrix)
+    public SudokuSolver(ref char[] sudoku)
     {
-      this.matrix = matrix;
+      matrix = new BinaryMatrix(ref sudoku);
       ColumnNode previous_column = null;
       for (int i = 0; i < matrix.width; i++)
       {
@@ -145,6 +47,9 @@ namespace SudokuSolver
         current_column = current_column.right;
         connectNodesInRow(ref current_column);
       }
+      List<DancingNode> solution_tmp = new List<DancingNode>();
+      algorithmX(ref solution_tmp);
+      convertResultToGrid();
     }
 
     private void connectNodesInColumn(ref ColumnNode column)
@@ -217,31 +122,14 @@ namespace SudokuSolver
       } while (tmp.bottom.row != -1);
     }
 
-    public void printList()
-    {
-      DancingNode tmp = head;
-      int result = 0;
-      do
-      {
-        tmp = tmp.right;
-        DancingNode tmp1 = tmp.bottom;
-        do
-        {
-          result++;
-          tmp1 = tmp1.bottom;
-        } while (tmp1 != tmp);
-      } while (tmp.right != head);
-      Console.WriteLine(result);
-    }
-
-    public void algorithmX(int k)
+    private void algorithmX(ref List<DancingNode> solution)
     {
       if (head.right == head)
       {
-        solution1 = new List<DancingNode>(solution);
+        solutions.Add(new List<DancingNode>(solution));
         return;
       }
-      else 
+      else
       {
         ColumnNode column = getLowestSizeColumn().column_node;
         column.cover();
@@ -256,7 +144,7 @@ namespace SudokuSolver
             node.column_node.cover();
           }
 
-          algorithmX(k + 1);
+          algorithmX(ref solution) ;
           solution.Remove(row);
           column = row.column_node;
           for (DancingNode node = row.left; node != row; node = node.left)
@@ -268,7 +156,7 @@ namespace SudokuSolver
       }
     }
 
-    public DancingNode getLowestSizeColumn()
+    private DancingNode getLowestSizeColumn()
     {
       DancingNode tmp = head;
       DancingNode result = head.right;
@@ -283,33 +171,32 @@ namespace SudokuSolver
       return result;
     }
 
-    public void convertResultToGrid()
+    private void convertResultToGrid()
     {
-      int[,] result = new int[9,9];
-
-      foreach (DancingNode node in solution1)
+      foreach (List<DancingNode> solution in solutions)
       {
-        //Console.WriteLine("row {0}, column {1}", node.row, node.column_node.column);
-        DancingNode first_node_in_row = node;
-        int column = node.column_node.column;
-
-        for (DancingNode i = node.right; i != node; i = i.right)
+        int[,] result = new int[9, 9];
+        foreach (DancingNode node in solution)
         {
-          if (i.column_node.column < column)
+          DancingNode first_node_in_row = node;
+          int column = node.column_node.column;
+
+          for (DancingNode i = node.right; i != node; i = i.right)
           {
-            first_node_in_row = i;
-            column = i.column_node.column;
+            if (i.column_node.column < column)
+            {
+              first_node_in_row = i;
+              column = i.column_node.column;
+            }
           }
+          int r = first_node_in_row.column_node.column / 9;
+          int c = first_node_in_row.column_node.column % 9;
+          int ans1 = first_node_in_row.right.column_node.column;
+          int value = ((ans1 - 81) / 9) + 1;
+          result[r, c] = value;
         }
-
-        int r = first_node_in_row.column_node.column / 9;
-        int c = first_node_in_row.column_node.column % 9;
-        int ans1 = first_node_in_row.right.column_node.column;
-        int value = ((ans1 - 81) / 9) + 1;
-        result[r, c] = value;
-
+        converted_result.Add(result);
       }
-      printResult(ref result);
     }
 
     private void printResult(ref int[,] result)
@@ -318,7 +205,7 @@ namespace SudokuSolver
       {
         for (int j = 0; j < 9; j++)
         {
-          if (j == 3 || j == 6 )
+          if (j == 3 || j == 6)
             Console.Write(" ");
           Console.Write(result[i, j]);
         }
@@ -329,6 +216,4 @@ namespace SudokuSolver
       }
     }
   }
-
-
 }

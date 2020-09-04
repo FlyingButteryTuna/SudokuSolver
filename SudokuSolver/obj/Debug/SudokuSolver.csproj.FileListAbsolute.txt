@@ -1,7 +1,0 @@
-C:\Users\Butterfly\source\repos\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.csprojAssemblyReference.cache
-C:\Users\Butterfly\source\repos\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.csproj.CoreCompileInputs.cache
-C:\Users\Butterfly\source\repos\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.exe.config
-C:\Users\Butterfly\source\repos\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.exe
-C:\Users\Butterfly\source\repos\SudokuSolver\SudokuSolver\bin\Debug\SudokuSolver.pdb
-C:\Users\Butterfly\source\repos\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.exe
-C:\Users\Butterfly\source\repos\SudokuSolver\SudokuSolver\obj\Debug\SudokuSolver.pdb

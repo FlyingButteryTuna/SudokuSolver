@@ -1,0 +1,10 @@
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\bin\Debug\SudokuSolverGui.exe.config
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\bin\Debug\SudokuSolverGui.exe
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\bin\Debug\SudokuSolverGui.pdb
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\obj\Debug\SudokuSolverGui.csprojAssemblyReference.cache
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\obj\Debug\SudokuSolverGui.Properties.Resources.resources
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\obj\Debug\SudokuSolverGui.csproj.GenerateResource.cache
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\obj\Debug\SudokuSolverGui.csproj.CoreCompileInputs.cache
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\obj\Debug\SudokuSolverGui.exe
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\obj\Debug\SudokuSolverGui.pdb
+C:\Users\Butterfly\source\repos\SudokuSolverGui\SudokuSolverGui\obj\Debug\SudokuSolverGui.GUI.resources
